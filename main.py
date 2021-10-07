@@ -1,35 +1,39 @@
-import splinter.driver.webdriver.chrome
+from selenium import webdriver
+import time
+
+import pyautogui
+import pywinauto
+from pynput.mouse import Controller
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import time
-from discord_webhook import DiscordWebhook
-import pyautogui
-import win32api, win32con
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import StaleElementReferenceException
-from pynput.mouse import Button, Controller
-import pywinauto
-import ctypes
+options = Options()
+options.add_experimental_option("debuggerAddress", "127.0.0.1:9014")
+options.add_argument(r"user-data-dir=C:\Users\oweno\AppData\Local\Google\Chrome\User Data")
+options.add_argument(r"--profile-directory=Profile 2")
+driver = webdriver.Chrome(executable_path=r'C:\Program Files (x86)\chromedriver.exe', options=options)
+from contextlib import suppress
 def findtrend():
     i = 1
     while i < 2:
-        options = Options()
-        options.add_experimental_option("debuggerAddress", "127.0.0.1:9014")
-        options.add_argument(r"user-data-dir=C:\Users\oweno\AppData\Local\Google\Chrome\User Data")
-        options.add_argument(r"--profile-directory=Profile 2")
-        driver = webdriver.Chrome(executable_path=r'C:\Program Files (x86)\chromedriver.exe', options=options)
+
         driver.switch_to.window(driver.window_handles[0])
-        app = pywinauto.Application().connect(path='chrome.exe')
-        mouse = Controller()
+        time.sleep(2)
+
         pyautogui.size()  # current screen resolution width and height
         (1920, 1080)
-        upTrend = \
+        try:
+            upTrend = \
             driver.find_element_by_xpath \
                 ("/html/body/div[2]/div[5]/div/div[1]/div[1]/div[5]/div/div[2]/div[1]/div[4]/div[2]/div[1]/div[2]")
+        except Exception:
+            pass
 
-        downTrend = \
+        try:
+            downTrend = \
             driver.find_element_by_xpath \
                 ("/html/body/div[2]/div[5]/div/div[1]/div[1]/div[5]/div/div[2]/div[1]/div[4]/div[2]/div[2]/div[2]")
+        except Exception:
+            pass
         u = False
         d = False
 
@@ -44,7 +48,7 @@ def findtrend():
             print("down")
             d = True
 
-
+        time.sleep(1)
 
         driver.switch_to.window(driver.window_handles[1])
 
@@ -62,11 +66,12 @@ def findtrend():
 
         total = (get_sec(timer.text))
 
-        if(total < 1000):
+        if(total < 10):
             pyautogui.moveTo(960, 383)
             pyautogui.click()
 
             if(d == True):
+
                 EnterDown = driver.find_elements_by_xpath("//*[contains(text(), 'Enter DOWN')]")[0]
                 EnterDown.click()
                 time.sleep(1)
@@ -74,7 +79,13 @@ def findtrend():
 
                 pyautogui.click()
 
-                pyautogui.keyDown(".001")
+                pyautogui.write(".001")
+
+                pyautogui.moveTo(x=1269, y=755)
+
+                pyautogui.click()
+
+
 
 
             if (u == True):
@@ -85,11 +96,22 @@ def findtrend():
 
                 pyautogui.click()
 
-                pyautogui.keyDown(".001")
+                pyautogui.write(".001")
 
+                pyautogui.moveTo(x=1269, y=755)
+
+                pyautogui.click()
+
+                pyautogui.moveTo(x=1912,y=562)
+
+                pyautogui.click()
+
+                pyautogui.moveTo(x=1817, y=566)
+
+                pyautogui.click()
         print(total)
-        driver.switch_to.window(driver.window_handles[0])
-        time.sleep(5)
+
+
 
 
 
